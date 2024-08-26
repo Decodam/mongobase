@@ -45,7 +45,7 @@ export default function LoginForm({borderless, className, AuthProviders}) {
 
 
   return (
-    <Card className={`w-full max-w-md ${borderless && "border-none shadow-none bg-background" } mx-auto ${className && className}`}>
+    <Card className={`w-full max-w-md ${borderless && "border-none shadow-none bg-background" }  max-md:border-none  max-md:shadow-none  max-md:bg-background mx-auto ${className && className}`}>
         <CardHeader className="space-y-1">
           <Link href={"/"} className='mx-auto mb-4 mt-2'>
             <Image height={60} width={60} src="/icon.svg" alt="supabase" /> 
