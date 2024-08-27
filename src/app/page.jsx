@@ -65,7 +65,7 @@ export default function Home() {
 
         <div className="mt-8 gap-3 flex justify-center">
           <Button size={"lg"} asChild>
-            <Link href={"/login"}>Get Started</Link>
+            <Link href={"/login"}>Try Now</Link>
           </Button>
           <Button size={"lg"} variant={"outline"} asChild>
             <Link href="https://docs.mongodb.com/manual/">
