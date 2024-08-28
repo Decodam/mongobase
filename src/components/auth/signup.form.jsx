@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,6 +22,15 @@ export default function SignupForm({borderless, className}) {
 
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
+  const authError = searchParams.get('error')
+  
+  useEffect(() => {
+    if(authError === "OAuthAccountNotLinked"){
+      setError("You are already connected to another Oauth provider!");
+    }
+  }, [authError])
+
+
 
   function resetForm() {
     setFullName('')
