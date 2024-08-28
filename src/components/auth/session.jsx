@@ -32,3 +32,13 @@ export async function Protected({ nextUrl, children }) {
   
   return <>{children(user)}</>;
 }
+
+export async function RedirectOnAuthenticated({ redirectUrl, children }) {
+  const session = await getServerSession();
+
+  if (session?.user) {
+    redirect(redirectUrl || '/');
+  }
+
+  return <>{children}</>;
+}

@@ -1,10 +1,7 @@
-import { auth } from "@/auth";
 import { Protected } from "@/components/auth/session";
 
 
 export default async function Profile({}) {
-  
-
 
   return (
     <Protected nextUrl={"profile"}>

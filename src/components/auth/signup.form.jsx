@@ -9,8 +9,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
 import OAuthSignInButton from "@/components/auth/oauth";
-import { IconBrandGithub } from "@tabler/icons-react";
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
+import { AuthProviders } from '@/components/auth/providers';
 
 export default function SignupForm({borderless, className}) {
   const [fullName, setFullName] = useState('')
@@ -31,13 +31,6 @@ export default function SignupForm({borderless, className}) {
     setError('')
     setLoading(false)
   }
-
-  const AuthProviders = [
-    {
-      provider: "github",
-      icon: IconBrandGithub,
-    },
-  ];
 
   let passwordScore = checkPasswordStrength(password)
 

@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
 import { useSearchParams } from 'next/navigation'
 import OAuthSignInButton from "@/components/auth/oauth";
-import { IconBrandGithub } from "@tabler/icons-react";
+import { AuthProviders } from '@/components/auth/providers'
 
 
 
@@ -30,13 +30,6 @@ export default function LoginForm({borderless, className}) {
     setError('');
     setLoading(false)
   }
-  
-  const AuthProviders = [
-    {
-      provider: "github",
-      icon: IconBrandGithub,
-    },
-  ];
 
   let passwordScore = checkPasswordStrength(password);
 
