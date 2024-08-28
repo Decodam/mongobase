@@ -19,7 +19,7 @@ export default function ProfileDropdown({ user }) {
       <DropdownMenu>
         <DropdownMenuTrigger className="focus:outline-none">
           <Avatar>
-            <AvatarImage src={user.image || "https://github.com/shadcn.png"} />
+            <AvatarImage src={user.image || "/default-user.jpg"} />
             <AvatarFallback>{user.name?.[0] || 'CN'}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
