@@ -189,7 +189,7 @@ export default function Home() {
             </p>
             <span className="hidden md:inline text-muted-foreground">•</span>
             <Link
-              href="https://github.com/Decodam/mongostarter"
+              href="https://github.com/Decodam/mongobase"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1 text-xs font-medium underline underline-offset-4"
@@ -199,7 +199,7 @@ export default function Home() {
             </Link>
           </div>
           <p className="text-center text-xs text-muted-foreground md:text-left">
-            &copy; {new Date().getFullYear()} MongoStarter. All rights reserved.
+            &copy; {new Date().getFullYear()} Mongobase. All rights reserved.
           </p>
         </div>
       </footer>

@@ -25,7 +25,7 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
     
 4. Add the necessary O Auth providers at `@/auth.js` file.
     
-    ```
+    ```js
     import NextAuth from "next-auth"
     import GitHub from "next-auth/providers/github"
     
@@ -44,7 +44,7 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
     
 5. Add the O Auth providers with necessary icons to the `@/components/auth/providers.js` file.
     
-    ```
+    ```js
     import { IconBrandGithub } from "@tabler/icons-react";
     
     export const AuthProviders = [
