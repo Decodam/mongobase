@@ -6,7 +6,7 @@ export default async function Profile({}) {
   return (
     <Protected nextUrl={"profile"}>
       {(user) => (
-        <>Profile -  {user.name}</>
+        <>Profile -  {user.name} image - {user.image}</>
       )}
     </Protected>
   );

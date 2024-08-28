@@ -66,9 +66,9 @@ export default function LoginForm({borderless, className}) {
           {AuthProviders && (
             <>
               <div className='space-y-2'>
-                {AuthProviders.map(({ provider, icon, key }) => (
+                {AuthProviders.map(({ index, provider, icon }) => (
                   <OAuthSignInButton
-                    key={key}
+                    key={index}
                     provider={provider}
                     icon={icon}
                     redirect={next ? `/${next}` : null}
