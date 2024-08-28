@@ -11,6 +11,9 @@ import { checkPasswordStrength, PasswordInput } from '@/components/auth/password
 import OAuthSignInButton from "@/components/auth/oauth";
 import { useSearchParams } from 'next/navigation';
 import { AuthProviders } from '@/components/auth/providers';
+import { useToast } from "@/components/ui/use-toast"
+import { createUserWithEmailPassword } from '@/actions/auth.actions'
+
 
 export default function SignupForm({borderless, className}) {
   const [fullName, setFullName] = useState('')
@@ -23,6 +26,8 @@ export default function SignupForm({borderless, className}) {
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
   const authError = searchParams.get('error')
+  const { toast } = useToast()
+
   
   useEffect(() => {
     if(authError === "OAuthAccountNotLinked"){
@@ -59,12 +64,20 @@ export default function SignupForm({borderless, className}) {
       return
     }
 
-    // Simulate a signup process
-    // Replace with actual signup logic (e.g., API call)
-    setTimeout(() => {
-      resetForm()
-      // Redirect or handle successful signup
-    }, 1000)
+    const authError = await createUserWithEmailPassword(email, password, fullName);
+
+    if (authError) {
+      setError(authError)
+      setLoading(false)
+      return
+    } else {
+      toast({
+        title: "Account Created!",
+        description: `Hello ${fullName}, your account has been created! Please login to get started.`,
+      })
+    }
+
+    resetForm()
   }
 
   return (
@@ -115,9 +128,8 @@ export default function SignupForm({borderless, className}) {
           </div>
           <div className="space-y-1">
             <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input 
+            <PasswordInput 
               id="confirm-password" 
-              type="password" 
               placeholder="Confirm your password" 
               value={confirmPassword}
               passwordScore={null}

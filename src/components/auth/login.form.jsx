@@ -11,6 +11,9 @@ import { checkPasswordStrength, PasswordInput } from '@/components/auth/password
 import { useSearchParams } from 'next/navigation'
 import OAuthSignInButton from "@/components/auth/oauth";
 import { AuthProviders } from '@/components/auth/providers'
+import { loginWithEmailPassword } from '@/actions/auth.actions'
+import { useToast } from '../ui/use-toast'
+import { useRouter } from 'next/navigation'
 
 
 
@@ -23,7 +26,11 @@ export default function LoginForm({borderless, className}) {
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
   const authError = searchParams.get('error')
-  
+  const { toast } = useToast()
+  const router = useRouter()
+
+
+
   useEffect(() => {
     if(authError === "OAuthAccountNotLinked"){
       setError("You are already connected to another Oauth provider!");
@@ -49,10 +56,22 @@ export default function LoginForm({borderless, className}) {
       return;
     }
       
-    setTimeout(() => {
-      resetForm()
-      // Redirect or handle successful signup
-    }, 1000)
+    const authError = await loginWithEmailPassword(email, password);
+
+    if (authError) {
+      setError(authError)
+      setLoading(false)
+      return
+    } else {
+      toast({
+        title: `Welcome back to your account!`,
+        description: `Lets do some cool stuff!.`,
+      })
+    }
+
+    router.push('/')
+
+    resetForm()
   }
 
 
