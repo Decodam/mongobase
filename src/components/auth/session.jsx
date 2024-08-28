@@ -1,8 +1,8 @@
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import getServerSession from "@/lib/getServerSession";
 
 export async function SignedIn({ children }) {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user) return null;
 
@@ -13,7 +13,7 @@ export async function SignedIn({ children }) {
 }
 
 export async function SignedOut({ children }) {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (session?.user) return null;
   
@@ -22,7 +22,7 @@ export async function SignedOut({ children }) {
 
 
 export async function Protected({ nextUrl, children }) {
-  const session = await auth();
+  const session = await getServerSession();
 
   if (!session?.user) {
     redirect(`/login${nextUrl ? `?next=${encodeURIComponent(nextUrl)}` : ""}`);

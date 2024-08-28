@@ -166,7 +166,7 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <Button variant="ghost" className="ml-6 mb-4" asChild>
-            <Link href="https://github.com/Decodam/mongostarter#readme" target="_blank" rel="noopener noreferrer">
+            <Link href="https://github.com/Decodam/mongobase#readme" target="_blank" rel="noopener noreferrer">
               Explore Starter Kit
             </Link>
           </Button>
