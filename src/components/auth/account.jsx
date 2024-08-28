@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
-import { logout } from "@/utils/auth.actions";
+import { logout } from "@/actions/auth.actions";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
 

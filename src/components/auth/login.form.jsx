@@ -8,14 +8,21 @@ import { Label } from "@/components/ui/label"
 import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
+import { useSearchParams } from 'next/navigation'
+import OAuthSignInButton from "@/components/auth/oauth";
+import { IconBrandGithub } from "@tabler/icons-react";
 
 
 
-export default function LoginForm({borderless, className, AuthProviders}) {
+export default function LoginForm({borderless, className}) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next')
+  
 
   function resetForm() {
     setEmail('');
@@ -24,6 +31,12 @@ export default function LoginForm({borderless, className, AuthProviders}) {
     setLoading(false)
   }
   
+  const AuthProviders = [
+    {
+      provider: "github",
+      icon: IconBrandGithub,
+    },
+  ];
 
   let passwordScore = checkPasswordStrength(password);
 
@@ -44,6 +57,7 @@ export default function LoginForm({borderless, className, AuthProviders}) {
   }
 
 
+
   return (
     <Card className={`w-full max-w-md ${borderless && "border-none shadow-none bg-background" }  max-md:border-none  max-md:shadow-none  max-md:bg-background mx-auto ${className && className}`}>
         <CardHeader className="space-y-1">
@@ -59,8 +73,13 @@ export default function LoginForm({borderless, className, AuthProviders}) {
           {AuthProviders && (
             <>
               <div className='space-y-2'>
-                {AuthProviders.map((provider) => (
-                  provider
+                {AuthProviders.map(({ provider, icon, key }) => (
+                  <OAuthSignInButton
+                    key={key}
+                    provider={provider}
+                    icon={icon}
+                    redirect={next ? `/${next}` : null}
+                  />
                 ))}
               </div>
               <span className="flex items-center">

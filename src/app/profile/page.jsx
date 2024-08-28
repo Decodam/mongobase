@@ -1,14 +1,16 @@
 import { auth } from "@/auth";
+import { Protected } from "@/components/auth/session";
 
 
 export default async function Profile({}) {
-  const session = await auth();
-  const user = session ? session.user : {};
+  
 
 
   return (
-    <div>
-      Profile -  {user.name}
-    </div>
+    <Protected nextUrl={"profile"}>
+      {(user) => (
+        <>Profile -  {user.name}</>
+      )}
+    </Protected>
   );
 }

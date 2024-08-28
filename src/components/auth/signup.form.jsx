@@ -8,14 +8,20 @@ import { Label } from "@/components/ui/label"
 import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
+import OAuthSignInButton from "@/components/auth/oauth";
+import { IconBrandGithub } from "@tabler/icons-react";
+import { useSearchParams } from 'next/navigation'
 
-export default function SignupForm({borderless, className, AuthProviders}) {
+export default function SignupForm({borderless, className}) {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const searchParams = useSearchParams()
+  const next = searchParams.get('next')
 
   function resetForm() {
     setFullName('')
@@ -25,6 +31,13 @@ export default function SignupForm({borderless, className, AuthProviders}) {
     setError('')
     setLoading(false)
   }
+
+  const AuthProviders = [
+    {
+      provider: "github",
+      icon: IconBrandGithub,
+    },
+  ];
 
   let passwordScore = checkPasswordStrength(password)
 
@@ -124,8 +137,13 @@ export default function SignupForm({borderless, className, AuthProviders}) {
               <span className="h-px flex-1 bg-border"></span>
             </span>
             <div className='space-y-2'>
-              {AuthProviders.map((provider) => (
-                provider
+              {AuthProviders.map(({ provider, icon, key }) => (
+                <OAuthSignInButton
+                  key={key}
+                  provider={provider}
+                  icon={icon}
+                  redirect={next ? `/${next}` : null}
+                />
               ))}
             </div>
           </>

@@ -3,7 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { IconBook, IconBrandMongodb, IconRocket, IconChevronRight, IconHeart, IconBrandGithub, IconShield } from "@tabler/icons-react";
-import { Session } from "@/components/auth/session";
+import { SignedIn, SignedOut } from "@/components/auth/session";
 import ProfileDropdown from "@/components/auth/account";
 
 export default function Home() {
@@ -20,21 +20,19 @@ export default function Home() {
         </Link>
 
         <div className="flex items-center gap-4">
-          <Session 
-            signedIn={(user) => (
-              <ProfileDropdown user={user} />
-            )}
-            signedOut={
-              <div className="flex items-center gap-2">
-                <Button variant="outline" asChild>
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button asChild>
-                  <Link href="/signup">Signup</Link>
-                </Button>
-              </div>
-            }
-          />
+          <SignedIn>
+            {(user) => (<ProfileDropdown user={user} />)}
+          </SignedIn>
+          <SignedOut>
+            <div className="flex items-center gap-2">
+              <Button variant="outline" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button asChild>
+                <Link href="/signup">Signup</Link>
+              </Button>
+            </div>
+          </SignedOut>
         </div>
       </nav>
 

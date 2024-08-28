@@ -1,11 +1,34 @@
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export async function Session({ signedOut, signedIn }) {
+export async function SignedIn({ children }) {
   const session = await auth();
 
-  if (!session?.user) return <>{signedOut}</>;
+  if (!session?.user) return null;
 
   const user = session.user;
 
-  return <>{signedIn(user)}</>;
+  
+  return <>{children(user)}</>;
+}
+
+export async function SignedOut({ children }) {
+  const session = await auth();
+
+  if (session?.user) return null;
+  
+  return <>{children}</>;
+}
+
+
+export async function Protected({ nextUrl, children }) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect(`/login${nextUrl ? `?next=${encodeURIComponent(nextUrl)}` : ""}`);
+  }
+
+  const user = session.user;
+  
+  return <>{children(user)}</>;
 }
