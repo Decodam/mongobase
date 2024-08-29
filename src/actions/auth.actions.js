@@ -62,8 +62,7 @@ export async function loginWithCredentials(email, password) {
 
     await signIn("credentials", { email, password, redirect: false });
 
-    redirect("/")
-
+    
   } catch (error) {
     console.log({ error });
 
@@ -77,8 +76,9 @@ export async function loginWithCredentials(email, password) {
         case "CallbackRouteError":
           return {error: cause && cause.err ? cause.err.toString() : "Callback route error."};
         default:
-          return {error: "Something went wrong."};
+          return {error: "Something went wrong. Please try again"};
       }
     }
   }
+  redirect("/")
 }

@@ -12,6 +12,31 @@ import { logout } from "@/actions/auth.actions";
 import { IconLogout, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
 
+
+
+
+export function getInitials(fullName) {
+  if (typeof fullName !== 'string' || !fullName.trim()) {
+    throw new Error("Invalid input. Please provide a non-empty string.");
+  }
+
+  const names = fullName.trim().split(/\s+/);
+
+  // Check if there are at least two words
+  if (names.length < 2) {
+    throw new Error("Full name must contain at least a first and last name.");
+  }
+
+  const firstName = names[0];
+  const lastName = names[names.length - 1];
+
+  // Extract initials from the first and last name
+  const initials = `${firstName.charAt(0).toUpperCase()}${lastName.charAt(0).toUpperCase()}`;
+
+  return initials;
+}
+
+
 export default function ProfileDropdown({ user }) {
 
   return (
@@ -20,7 +45,7 @@ export default function ProfileDropdown({ user }) {
         <DropdownMenuTrigger className="focus:outline-none">
           <Avatar>
             <AvatarImage src={user.image || "/default-user.jpg"} />
-            <AvatarFallback>{user.name?.[0] || 'CN'}</AvatarFallback>
+            <AvatarFallback>{user.name? getInitials(user.name) : 'U'}</AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
 
