@@ -3,6 +3,8 @@ import { Inter as FontSans } from "next/font/google"
 
 import { ThemeProvider } from "@/utils/themeProvider"
 import { cn } from "@/lib/shadcn"
+import { Toaster } from "@/components/ui/toaster"
+
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -13,6 +15,7 @@ export const metadata= {
   title: "Mongobase",
   description: "Mongo db Next Auth Starter Template"
 }
+
 
 export default function RootLayout({ children }) {
   return (
@@ -31,6 +34,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

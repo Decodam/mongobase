@@ -9,8 +9,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
 import { useSearchParams } from 'next/navigation'
-import OAuthSignInButton from "@/components/auth/oauth";
-import { AuthProviders } from '@/components/auth/providers'
+import OAuthSignInButton, { OAuthProviders } from "@/components/auth/oauth";
 
 
 
@@ -69,10 +68,10 @@ export default function LoginForm({borderless, className}) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {AuthProviders && (
+          {OAuthProviders && (
             <>
               <div className='space-y-2'>
-                {AuthProviders.map(({ provider, icon, key }) => (
+                {OAuthProviders.map(({ provider, icon, key }) => (
                   <OAuthSignInButton
                     key={key}
                     provider={provider}
