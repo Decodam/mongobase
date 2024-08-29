@@ -21,6 +21,13 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
     # Generate github oauth client from: https://github.com/settings/developers
     GITHUB_CLIENT_ID=<github_client_id>
     GITHUB_CLIENT_SECRET=<github_client_secret>
+
+    # google
+    GOOGLE_CLIENT_ID=<google_client_id>
+    GOOGLE_CLIENT_SECRET=<google_client_secret>
+
+    # ------- Add this to .env for prisma
+    DATABASE_URL=<mongodb_connection_url>
     ```
     
 4. Add the necessary O Auth providers at `@/auth.js` file.
