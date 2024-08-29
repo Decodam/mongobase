@@ -1,6 +1,7 @@
 import "@/styles/globals.css"
 import { Inter as FontSans } from "next/font/google"
 
+import { ThemeProvider } from "@/utils/themeProvider"
 import { cn } from "@/lib/shadcn"
 
 const fontSans = FontSans({
@@ -23,7 +24,14 @@ export default function RootLayout({ children }) {
           fontSans.variable
         )}
       >
-        {children}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   )
