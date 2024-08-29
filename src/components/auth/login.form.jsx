@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -22,7 +22,13 @@ export default function LoginForm({borderless, className}) {
 
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
+  const oauth_error = searchParams.get('error')
   
+  useEffect(() => {
+    if (oauth_error === "OAuthAccountNotLinked") {
+      setError("This OAuth provider is not yet linked to your account! Please login with a connected provider to connect and use it.")
+    }
+  }, [oauth_error])
 
   function resetForm() {
     setEmail('');
