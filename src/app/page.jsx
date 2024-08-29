@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { IconBook, IconBrandMongodb, IconRocket, IconChevronRight, IconHeart, IconBrandGithub, IconShield } from "@tabler/icons-react";
 import { SignedIn, SignedOut } from "@/components/auth/session";
-import ProfileDropdown from "@/components/auth/account";
+import AvatarDropdown from "@/components/auth/avatar-dropdown";
 import { ThemeToggleIconButton } from "@/components/ui/theme";
 
 export default function Home() {
@@ -22,7 +22,7 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           <SignedIn>
-            {(user) => (<ProfileDropdown user={user} />)}
+            {(user) => (<AvatarDropdown user={user} />)}
           </SignedIn>
           <SignedOut>
             <div className="flex items-center gap-2">

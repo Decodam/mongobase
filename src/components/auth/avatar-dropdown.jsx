@@ -9,7 +9,7 @@ import {
   DropdownMenuItem
 } from "@/components/ui/dropdown-menu"
 import { logout } from "@/actions/auth.actions";
-import { IconLogout, IconUser } from "@tabler/icons-react";
+import { IconLogout, IconSettings, IconUser } from "@tabler/icons-react";
 import Link from "next/link";
 
 
@@ -37,7 +37,7 @@ export function getInitials(fullName) {
 }
 
 
-export default function ProfileDropdown({ user }) {
+export default function AvatarDropdown({ user }) {
 
   return (
     <>
@@ -55,9 +55,12 @@ export default function ProfileDropdown({ user }) {
           <div>
             <Link href="/profile">
               <DropdownMenuItem className="cursor-pointer p-2 flex gap-2 items-center">
-                <IconUser size={16} /><span>Account</span>
+                <IconUser size={16} /><span>Profile</span>
               </DropdownMenuItem>
             </Link>
+            <DropdownMenuItem className="cursor-pointer p-2 flex gap-2 items-center">
+              <IconSettings size={16} /><span>Settings</span>
+            </DropdownMenuItem>
             <form action={logout}>
               <button type="submit" className="p-2 w-full flex gap-2 items-center text-left bg-background hover:bg-destructive/10 font-medium rounded transition text-destructive text-sm">
                 <IconLogout size={16} /><span>Logout</span>

@@ -4,11 +4,11 @@ import { prisma } from "@/lib/prisma";
 
 import { signIn, signOut } from "@/auth";
 import { redirect } from "next/navigation";
-import { AuthError } from "@auth/core/errors";
 
 
 export async function logout(){
   await signOut();
+  redirect("/login")
 }
 
 export async function loginWithOAuth(provider, redirect) {
