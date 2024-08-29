@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 import { signIn, signOut } from "@/auth";
 import { redirect } from "next/navigation";
+import { AuthError } from "@auth/core/errors";
 
 
 export async function logout(){
@@ -29,7 +30,7 @@ export async function createUserWithCredentials(fullname, email, password) {
     }
 
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 16);
+    const hashedPassword = await bcrypt.hash(password, 12);
 
     // Create the user and credential records
     const user = await prisma.user.create({
@@ -50,4 +51,34 @@ export async function createUserWithCredentials(fullname, email, password) {
     return {error: error.message || "Something went wrong"}
   }
   redirect("/login")
+}
+
+
+export async function loginWithCredentials(email, password) {
+  try {
+    if (!email || !password) {
+      throw new Error("Please provide email and password to continue");
+    }
+
+    await signIn("credentials", { email, password, redirect: false });
+
+    redirect("/")
+
+  } catch (error) {
+    console.log({ error });
+
+    if (error instanceof Error) {
+      const type = error.type;
+      const cause = error.cause;
+
+      switch (type) {
+        case "CredentialsSignin":
+          return {error: "Invalid credentials."};
+        case "CallbackRouteError":
+          return {error: cause && cause.err ? cause.err.toString() : "Callback route error."};
+        default:
+          return {error: "Something went wrong."};
+      }
+    }
+  }
 }

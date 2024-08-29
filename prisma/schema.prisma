@@ -21,7 +21,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  credentials   Credential[]
+  credential    Credential?  // Changed to a single Credential object
   role          String       @default("user")  // Added role with default value "user"
   
   createdAt     DateTime     @default(now())
@@ -73,7 +73,7 @@ model VerificationToken {
 // New Credential model for email/password authentication
 model Credential {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId    String   @db.ObjectId
+  userId    String   @db.ObjectId @unique
   email     String   @unique
   password  String   // Store hashed passwords
 

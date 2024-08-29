@@ -10,6 +10,8 @@ import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
 import { useSearchParams } from 'next/navigation'
 import OAuthSignInButton, { OAuthProviders } from "@/components/auth/oauth";
+import { useToast } from '../ui/use-toast'
+import { loginWithCredentials } from '@/actions/auth.actions'
 
 
 
@@ -18,6 +20,7 @@ export default function LoginForm({borderless, className}) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast()
 
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
@@ -47,6 +50,24 @@ export default function LoginForm({borderless, className}) {
       setLoading(false);
       return;
     }
+
+
+    // call signup method on server action
+    const authUser = await loginWithCredentials(email, password)
+
+    // error handling
+    if (authUser?.error) {
+      setError(authUser.error)
+      setLoading(false)
+      return
+    } else {
+      toast({
+        description: `Welcome back! Lets get you started!`,
+      })
+    }
+
+
+
       
     setTimeout(() => {
       resetForm()
