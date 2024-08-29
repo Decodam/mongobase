@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -9,8 +9,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
 import { useSearchParams } from 'next/navigation'
-import OAuthSignInButton from "@/components/auth/oauth";
-import { AuthProviders } from '@/components/auth/providers'
+import OAuthSignInButton, { OAuthProviders } from "@/components/auth/oauth";
+import { useToast } from '../ui/use-toast'
+import { loginWithCredentials } from '@/actions/auth.actions'
 
 
 
@@ -19,10 +20,17 @@ export default function LoginForm({borderless, className}) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const { toast } = useToast()
 
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
+  const oauth_error = searchParams.get('error')
   
+  useEffect(() => {
+    if (oauth_error === "OAuthAccountNotLinked") {
+      setError("This OAuth provider is not yet linked to your account! Please login with a connected provider to connect and use it.")
+    }
+  }, [oauth_error])
 
   function resetForm() {
     setEmail('');
@@ -42,6 +50,24 @@ export default function LoginForm({borderless, className}) {
       setLoading(false);
       return;
     }
+
+
+    // call signup method on server action
+    const authUser = await loginWithCredentials(email, password)
+
+    // error handling
+    if (authUser?.error) {
+      setError(authUser.error)
+      setLoading(false)
+      return
+    } else {
+      toast({
+        description: `Welcome back! Lets get you started!`,
+      })
+    }
+
+
+
       
     setTimeout(() => {
       resetForm()
@@ -63,10 +89,10 @@ export default function LoginForm({borderless, className}) {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {AuthProviders && (
+          {OAuthProviders && (
             <>
               <div className='space-y-2'>
-                {AuthProviders.map(({ provider, icon, key }) => (
+                {OAuthProviders.map(({ provider, icon, key }) => (
                   <OAuthSignInButton
                     key={key}
                     provider={provider}

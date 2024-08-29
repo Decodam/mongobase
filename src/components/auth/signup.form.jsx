@@ -8,9 +8,13 @@ import { Label } from "@/components/ui/label"
 import Image from 'next/image'
 import Link from 'next/link'
 import { checkPasswordStrength, PasswordInput } from '@/components/auth/password-input'
-import OAuthSignInButton from "@/components/auth/oauth";
+import OAuthSignInButton, { OAuthProviders } from "@/components/auth/oauth";
 import { useSearchParams } from 'next/navigation';
-import { AuthProviders } from '@/components/auth/providers';
+import { createUserWithCredentials } from '@/actions/auth.actions'
+import { useToast } from "@/components/ui/use-toast"
+
+
+
 
 export default function SignupForm({borderless, className}) {
   const [fullName, setFullName] = useState('')
@@ -19,10 +23,16 @@ export default function SignupForm({borderless, className}) {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const { toast } = useToast()
+
+
 
   const searchParams = useSearchParams()
   const next = searchParams.get('next')
-
+  
+  
+  
+  
   function resetForm() {
     setFullName('')
     setEmail('')
@@ -38,6 +48,8 @@ export default function SignupForm({borderless, className}) {
     e.preventDefault()
     setLoading(true)
 
+
+    // password validation
     if (passwordScore < 2) {
       setError("Password is too weak! Add numbers, special characters, and a minimum of 8 characters with capital letters.")
       setLoading(false)
@@ -49,12 +61,27 @@ export default function SignupForm({borderless, className}) {
       setLoading(false)
       return
     }
+    
+    
+    
+    // call signup method on server action
+    const newUser = await createUserWithCredentials(fullName, email, password)
+    
+    // error handling
+    if (newUser?.error) {
+      setError(newUser.error)
+      setLoading(false)
+      return
+    } else {
+      toast({
+        title: "Your account has been created!",
+        description: `Hello ${fullName}! Your new account has been created! Login to get started!`,
+      })
+    }
+    
 
-    // Simulate a signup process
-    // Replace with actual signup logic (e.g., API call)
     setTimeout(() => {
       resetForm()
-      // Redirect or handle successful signup
     }, 1000)
   }
 
@@ -106,9 +133,8 @@ export default function SignupForm({borderless, className}) {
           </div>
           <div className="space-y-1">
             <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input 
+            <PasswordInput 
               id="confirm-password" 
-              type="password" 
               placeholder="Confirm your password" 
               value={confirmPassword}
               passwordScore={null}
@@ -122,7 +148,7 @@ export default function SignupForm({borderless, className}) {
             </Button>
           </div>
         </form>
-        {AuthProviders && (
+        {OAuthProviders && (
           <>
             <span className="flex items-center">
               <span className="h-px flex-1 bg-border"></span>
@@ -130,7 +156,7 @@ export default function SignupForm({borderless, className}) {
               <span className="h-px flex-1 bg-border"></span>
             </span>
             <div className='space-y-2'>
-              {AuthProviders.map(({ provider, icon, key }) => (
+              {OAuthProviders.map(({ provider, icon, key }) => (
                 <OAuthSignInButton
                   key={key}
                   provider={provider}

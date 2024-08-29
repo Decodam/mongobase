@@ -5,6 +5,7 @@ import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/ca
 import { IconBook, IconBrandMongodb, IconRocket, IconChevronRight, IconHeart, IconBrandGithub, IconShield } from "@tabler/icons-react";
 import { SignedIn, SignedOut } from "@/components/auth/session";
 import ProfileDropdown from "@/components/auth/account";
+import { ThemeToggleIconButton } from "@/components/ui/theme";
 
 export default function Home() {
 
@@ -33,6 +34,7 @@ export default function Home() {
               </Button>
             </div>
           </SignedOut>
+          <ThemeToggleIconButton />
         </div>
       </nav>
 
