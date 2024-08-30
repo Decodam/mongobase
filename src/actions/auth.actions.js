@@ -37,7 +37,7 @@ export async function createUserWithCredentials(fullname, email, password) {
       data: {
         name: fullname,
         email,
-        credentials: {
+        credential: {
           create: {
             email,
             password: hashedPassword,

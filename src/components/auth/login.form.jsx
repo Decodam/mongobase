@@ -69,10 +69,7 @@ export default function LoginForm({borderless, className}) {
 
 
       
-    setTimeout(() => {
-      resetForm()
-      // Redirect or handle successful signup
-    }, 1000)
+    resetForm()
   }
 
 
@@ -93,12 +90,13 @@ export default function LoginForm({borderless, className}) {
             <>
               <div className='space-y-2'>
                 {OAuthProviders.map(({ provider, icon, key }) => (
-                  <OAuthSignInButton
-                    key={key}
-                    provider={provider}
-                    icon={icon}
-                    redirect={next ? `/${next}` : null}
-                  />
+                  <div key={key}>
+                    <OAuthSignInButton
+                      provider={provider}
+                      icon={icon}
+                      redirect={next ? `/${next}` : null}
+                    />
+                  </div>
                 ))}
               </div>
               <span className="flex items-center">

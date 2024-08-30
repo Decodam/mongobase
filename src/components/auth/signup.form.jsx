@@ -80,9 +80,7 @@ export default function SignupForm({borderless, className}) {
     }
     
 
-    setTimeout(() => {
-      resetForm()
-    }, 1000)
+    resetForm()
   }
 
   return (
@@ -157,12 +155,13 @@ export default function SignupForm({borderless, className}) {
             </span>
             <div className='space-y-2'>
               {OAuthProviders.map(({ provider, icon, key }) => (
-                <OAuthSignInButton
-                  key={key}
-                  provider={provider}
-                  icon={icon}
-                  redirect={next ? `/${next}` : null}
-                />
+                <div key={key}>
+                  <OAuthSignInButton
+                    provider={provider}
+                    icon={icon}
+                    redirect={next ? `/${next}` : null}
+                  />
+                </div>
               ))}
             </div>
           </>
