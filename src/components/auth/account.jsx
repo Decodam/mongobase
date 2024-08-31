@@ -367,7 +367,56 @@ export default function UserProfile({ user }) {
               </>
             ) : (
               <>
-                Feature comming soon....
+                <div className="connected-accounts py-6">
+                  <div className="space-y-4">
+                    <div className="flex">
+                      <h2 className="text-lg font-semibold">Security Panel</h2>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="flex flex-1 item-center space-x-4">
+                        <div className="font-medium">Change Email Address</div>
+                      </div>
+
+                      <Button
+                        disabled={loading}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                    <Separator />
+                    <div className="flex">
+                      <h2 className="text-lg font-semibold">Password Configuration</h2>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="flex flex-1 item-center space-x-4">
+                        <div className="font-medium">Enable Password</div>
+                      </div>
+
+                      <Button
+                        disabled={loading}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Enable
+                      </Button>
+                    </div>
+                    <div className="flex items-center">
+                      <div className="flex flex-1 item-center space-x-4">
+                        <div className="font-medium">Change Password</div>
+                      </div>
+
+                      <Button
+                        disabled={loading}
+                        variant="outline"
+                        size="sm"
+                      >
+                        Reset
+                      </Button>
+                    </div>
+                  </div>
+                </div>
               </>
             )}
 
