@@ -44,7 +44,7 @@ export function getInitials(fullName) {
 
 
 export default function UserProfile({ user }) {
-  const [isModalOpen, setIsModalOpen] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [tab, setTab] = useState(0);
 
   const [userData, setUserData] = useState(null);

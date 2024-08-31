@@ -168,8 +168,8 @@ export default function Home() {
             </CardDescription>
           </CardHeader>
           <Button variant="ghost" className="ml-6 mb-4" asChild>
-            <Link href="https://github.com/Decodam/mongobase#readme" target="_blank" rel="noopener noreferrer">
-              Explore Starter Kit
+            <Link href="https://paper-dryosaurus-158.notion.site/Mongobase-f383b725404249f8abe883f1d7d42fd7#ed9f05f96d7f460c91d2600387bd5142" target="_blank" rel="noopener noreferrer">
+              Explore Documentaion
             </Link>
           </Button>
         </Card>

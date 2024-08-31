@@ -1,7 +1,7 @@
 import "@/styles/globals.css"
 import { Inter as FontSans } from "next/font/google"
 
-import { ThemeProvider } from "@/utils/themeProvider"
+import { ThemeProvider } from "@/components/ui/themeProvider"
 import { cn } from "@/lib/shadcn"
 import { Toaster } from "@/components/ui/toaster"
 

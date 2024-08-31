@@ -1,17 +1,20 @@
+# Mongobase
+
 Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo db and shadcn ui components. With pre built ui and reusable components it will make your workflow 10 times faster!
+
+Check out this live demo, deployed with `Vercel` — [https://mongobase-demo.vercel.app/](https://mongobase-demo.vercel.app/)
 
 ---
 
 ## Project Setup
 
-1. Clone the repository from `@Decodam/mongobase`  using git clone command
+1. Initiate the project. You can either clone this repository and run `npm install` to start the project. Else you can run the following command on your terminal
     
     ```bash
-    git clone https://github.com/Decodam/mongobase.git
+    npx create-next-app -e https://github.com/Decodam/mongobase
     ```
     
-2. Run `npm install` for installing the necessary packages.
-3. Add enviornment variables at the `.env.local` and `.env` file.
+2. Add enviornment variables at the `.env.local` and `.env` file.
     
     ```bash
     # Copy the same mongo_uri variable at the .env file for prisma
@@ -21,18 +24,20 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
     # Generate github oauth client from: https://github.com/settings/developers
     GITHUB_CLIENT_ID=<github_client_id>
     GITHUB_CLIENT_SECRET=<github_client_secret>
-
+    
     # google
     GOOGLE_CLIENT_ID=<google_client_id>
     GOOGLE_CLIENT_SECRET=<google_client_secret>
-
+    
+    # you can add more providers
+    
     # ------- Add this to .env for prisma
     DATABASE_URL=<mongodb_connection_url>
     ```
     
-4. Add the necessary O Auth providers at `@/auth.js` file.
+3. Add the necessary O Auth providers at `@/auth.js` file.
     
-    ```js
+    ```
     import NextAuth from "next-auth"
     import GitHub from "next-auth/providers/github"
     
@@ -42,17 +47,18 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
           clientId: process.env.GITHUB_CLIENT_ID,
           clientSecret: process.env.GITHUB_CLIENT_SECRET,
         }),
+        ...
       ],
-      pages: {
-        signIn: "/login",
-      },
+      ...
     })
     ```
     
-5. Add the O Auth providers with necessary icons to the `@/components/auth/providers.js` file.
+4. Add the O Auth providers with necessary icons to the `@/components/auth/oauth.js`x file.
     
-    ```js
+    ```
     import { IconBrandGithub } from "@tabler/icons-react";
+    
+    // you can also use svg components for displaying provider logos
     
     export const AuthProviders = [
       {
@@ -62,10 +68,9 @@ Mongobase is a starter template using Next js, Next Auth V5, prisma orm, mongo d
     ];
     ```
     
-6. Run `npm run dev` to start the development server
+5. Run `npm run dev` to start the development server
 
 ---
-
 
 ## Session Management
 
@@ -88,7 +93,7 @@ export default function Navbar(){
       <div className="flex items-center gap-4">
 	      {/* SignedIn also returns the authenticated user which can be used like this */}
         <SignedIn>
-          {(user) => (<ProfileDropdown user={user} />)}
+          {(user) => (<SomeComponent user={user} />)}
         </SignedIn>
         
         <SignedOut>
@@ -103,50 +108,9 @@ export default function Navbar(){
         </SignedOut>
       </div>
     </nav>
- )
+	)
 }
 ```
-
-### Protected Routes
-
-As of now Next Auth V5 is still in beta. Hence there are some issues with middleware. According to vercel’s best practices, middleware should be avoided for route protection. Firstly because its not possible to return the user to the other components, thus we will have to make at-least two request to get the sessions. Hence we use the `<Protected />` component to protect our routes 
-
-```jsx
-import { Protected } from "@/components/auth/session";
-
-export default async function Profile({}) {
-	// next url is passed in then we will redirect to this url after login
-  return (
-    <Protected nextUrl={"profile"}> 
-      {(user) => (
-        <>Profile -  {user.name}</>
-      )}
-    </Protected>
-  );
-}
-```
-
-### RedirectOnAuthenticated
-The Authenticated component is used to redirect authenticated users away from specific pages, ensuring that only unauthenticated users can access the content. If a user is already authenticated, they will be redirected to a specified URL or the default home page (/). This component helps manage routes that should only be accessible by unauthenticated users.
-
-```jsx
-import { Authenticated } from "@/components/auth/Authenticated";
-
-export default async function SomePage() {
-  return (
-    <Authenticated redirectUrl="/profile">
-      <div>
-        <h1>Welcome to the page for unauthenticated users!</h1>
-        {/* Other content for unauthenticated users */}
-      </div>
-    </Authenticated>
-  );
-}
-```
-
----
-
-
 
 ## Authentication Components
 
@@ -212,6 +176,145 @@ export default function LoginPage() {
 }
 ```
 
+### User Profile
+
+```jsx
+import { SignedIn, SignedOut } from "@/components/auth/session";
+import UserProfile from "@/components/auth/account";
+
+export default function Profile(){
+	return(
+    <SignedIn>
+	    {(user) => (<UserProfile user={user} />)}
+	  </SignedIn>
+  )
+}
+```
+
+---
+
+## Route Protection
+
+The starter template uses next js middleware for route protection. We have admin routes, public routes, auth routes and protected routes. To change or add more routes you can edit them at `@/middleware.js` file.
+
+```jsx
+// Routes
+const protectedRoutes = ["/profile"];
+const publicRoutes = ["/"];
+const authRoutes = ["/login", "/signup"];
+const adminRoutes = ["/admin"];
+```
+
+By default, users have the role of users. if role is “admin” then only they can access admin route.
+
+### API Route Protection
+
+You can create custom API routes and protect them by passing the `req` parameter and checking if `req.auth` exists. For example, here is a demo route for `/api/demo` endpoint.
+
+```jsx
+import { auth } from "@/auth"
+import { prisma } from "@/lib/prisma";
+import { NextResponse } from "next/server"
+
+export const GET = auth(async function GET(req) {
+	// unauthenticated users dont get access
+  if (!req.auth) {
+    return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  }
+
+  try {
+    // Query data along with associated details from Prisma
+    const queryData = await fetchSomething();
+
+    if (!queryData) {
+      return NextResponse.json({ message: "Data not found" }, { status: 404 });
+    }
+
+    return NextResponse.json({ data: queryData }, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+  }
+});
+```
+
+---
+
+# Built in API Routes
+
+The project comes with built in routes for user-details which is totally customisable.
+
+## API Route Documentation: `/api/user-details`
+
+### **GET Method —**
+
+**Description**:
+Fetches user data along with associated accounts for the authenticated user. The response includes the user's basic details and filters out sensitive information from accounts, only returning the `provider` and `type` fields.
+
+**Authentication**:
+Required (via `auth` middleware).
+
+**Response**:
+
+- **200 OK**: User data retrieved successfully.
+- **401 Unauthorized**: User is not authenticated.
+- **404 Not Found**: User not found.
+- **500 Internal Server Error**: Error fetching user data.
+
+**Example Response**:
+
+```json
+{
+  "data": {
+    "id": "user_id",
+    "name": "John Doe",
+    "email": "john.doe@example.com",
+    "accounts": [
+      {
+        "provider": "google",
+        "type": "oidc"
+      }
+    ]
+  }
+}
+
+```
+
+### **POST Method —**
+
+**Description**:
+Updates the authenticated user's name and/or profile image. At least one of the fields (`name` or `image`) must be provided.
+
+**Authentication**:
+Required (via `auth` middleware).
+
+**Request Body**:
+
+- `name`: New name for the user (optional).
+- `image`: New profile image URL for the user (optional).
+
+**Response**:
+
+- **200 OK**: User data updated successfully.
+- **401 Unauthorized**: User is not authenticated.
+- **400 Bad Request**: Neither `name` nor `image` is provided.
+- **500 Internal Server Error**: Error updating user data.
+
+**Example Response**:
+
+```json
+{
+  "message": "Your account has been updated successfully",
+  "data": {
+    "id": "user_id",
+    "name": "Jane Doe",
+    "email": "jane.doe@example.com",
+    "image": "<https://example.com/image.jpg>"
+  }
+}
+
+```
+
 ---
 
 ## Contributing
@@ -222,3 +325,15 @@ We welcome contributions to enhance the functionality and usability of this proj
 2. **Create a Branch**: Develop your feature or fix on a new branch.
 3. **Make Changes**: Implement your changes and ensure they are well-tested.
 4. **Submit a Pull Request**: Once your changes are ready, submit a pull request describing your modifications and the problem they solve.
+
+## Upcoming changes and updates
+
+1. I am currently trying to get sessions authentication working with `auth.js` but it isn’t helping as of now because it doesn’t supports credential login.
+2. I am trying to enable 2 factor authentication and password resent features as well. But again facing the same difficulties due to the limitation of this authentication library.
+
+---
+
+❤️ Thanks a lot for visiting. Built with love by [@Decodam](https://github.com/Decodam)
+
+- **Linkedin —** [@arghya-mondal-work](https://www.linkedin.com/in/arghya-mondal-work/)
+- **Instagram — [@**arghya__mondal](https://www.instagram.com/arghya__mondal/)
